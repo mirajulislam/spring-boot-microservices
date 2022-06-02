@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.microservices.product.server</groupId>
-	<artifactId>product-service1</artifactId>
+	<artifactId>product-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>product-service1</name>
+	<name>product-service</name>
 	<description>Spring boot microservice</description>
 	<properties>
 		<java.version>1.8</java.version>
