@@ -14,7 +14,7 @@ public class CurrencyConversionController {
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to,
 			@PathVariable BigDecimal quantity) {
-		return null;
+		return new CurrencyConversionBean(1L,from,to,BigDecimal.ONE,quantity,quantity,0);
 	}
 
 }
