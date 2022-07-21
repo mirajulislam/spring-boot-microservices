@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.currency.conversion.bean.CurrencyConversionBean;
 import com.currency.conversion.repo.CurrencyExchangeServiceProxy;
+import com.currency.conversion.repo.TestLimitsServiceProxy;
 
 
 @RestController
@@ -24,6 +25,8 @@ public class CurrencyConversionController {
 
 	@Autowired
 	private CurrencyExchangeServiceProxy proxy;
+	@Autowired
+	private TestLimitsServiceProxy testLimitsServiceProxy;
 
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to,
@@ -52,6 +55,11 @@ public class CurrencyConversionController {
 		logger.info("{}", response);
 		return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
 				quantity.multiply(response.getConversionMultiple()), response.getPort());
+	}
+	
+	@GetMapping("/limits-test-feign/")
+	public String testValue() {
+		return testLimitsServiceProxy.testValue();
 	}
 
 }

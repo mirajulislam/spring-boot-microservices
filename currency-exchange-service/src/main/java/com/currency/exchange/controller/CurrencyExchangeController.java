@@ -27,4 +27,9 @@ public class CurrencyExchangeController {
 		logger.info("{}", exchangeValue);
 		return exchangeValue;
 	}
+	
+	@GetMapping("/currency-test/")
+	public String testValue() {
+		return "Currency Exchange Test Micoservice api working";
+	}
 }

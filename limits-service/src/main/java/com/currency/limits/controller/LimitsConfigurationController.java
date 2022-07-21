@@ -19,6 +19,11 @@ public class LimitsConfigurationController {
 		return limitConfiguration;
 	}
 	
+	@GetMapping("/limit-test/")
+	public String testValue() {
+		return "Limit service Test Micoservice api working";
+	}
+	
 	@GetMapping("/fault-tolerance-example")
 	@HystrixCommand(fallbackMethod="fallbackRetrieveConfiguration")
 	public LimitConfiguration retrieveConfiguration() {
