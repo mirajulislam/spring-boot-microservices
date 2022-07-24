@@ -2,10 +2,7 @@ package com.currency.conversion.controller;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,53 +10,46 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.currency.conversion.bean.CurrencyConversionBean;
-import com.currency.conversion.repo.CurrencyExchangeServiceProxy;
-import com.currency.conversion.repo.TestLimitsServiceProxy;
-
+import com.currency.conversion.bean.CurrencyConversion;
+import com.currency.conversion.repo.CurrencyExchangeProxy;
 
 @RestController
 public class CurrencyConversionController {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	@Autowired
-	private CurrencyExchangeServiceProxy proxy;
-	@Autowired
-	private TestLimitsServiceProxy testLimitsServiceProxy;
+	private CurrencyExchangeProxy proxy;
 
-	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
-	public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to,
+	@GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
+	public CurrencyConversion calculateCurrencyConversion(@PathVariable String from, @PathVariable String to,
 			@PathVariable BigDecimal quantity) {
-		// Feign - Problem 1
-		Map<String, String> uriVariables = new HashMap<>();
+
+		HashMap<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("from", from);
 		uriVariables.put("to", to);
 
-		ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().getForEntity(
-				"http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversionBean.class,
-				uriVariables);
+		ResponseEntity<CurrencyConversion> responseEntity = new RestTemplate().getForEntity(
+				"http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversion.class, uriVariables);
 
-		CurrencyConversionBean response = responseEntity.getBody();
+		CurrencyConversion currencyConversion = responseEntity.getBody();
 
-		return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
-				quantity.multiply(response.getConversionMultiple()), response.getPort());
+		return new CurrencyConversion(currencyConversion.getId(), from, to, quantity,
+				currencyConversion.getConversionMultiple(),
+				quantity.multiply(currencyConversion.getConversionMultiple()),
+				currencyConversion.getEnvironment() + " " + "rest template");
+
 	}
 
-	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
-	public CurrencyConversionBean convertCurrencyFeign(@PathVariable String from, @PathVariable String to,
+	@GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
+	public CurrencyConversion calculateCurrencyConversionFeign(@PathVariable String from, @PathVariable String to,
 			@PathVariable BigDecimal quantity) {
 
-		CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
+		CurrencyConversion currencyConversion = proxy.retrieveExchangeValue(from, to);
 
-		logger.info("{}", response);
-		return new CurrencyConversionBean(response.getId(), from, to, response.getConversionMultiple(), quantity,
-				quantity.multiply(response.getConversionMultiple()), response.getPort());
-	}
-	
-	@GetMapping("/limits-test-feign/")
-	public String testValue() {
-		return testLimitsServiceProxy.testValue();
+		return new CurrencyConversion(currencyConversion.getId(), from, to, quantity,
+				currencyConversion.getConversionMultiple(),
+				quantity.multiply(currencyConversion.getConversionMultiple()),
+				currencyConversion.getEnvironment() + " " + "feign");
+
 	}
 
 }
