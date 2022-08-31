@@ -1,3 +1,45 @@
-build command
+project build and docker image command
 
 ------> spring-boot:build-image -DskipTests
+
+docker command
+
+1st step:   go to project jar location in Docker Quickstart Terminal.
+            example : 
+            cd /d
+            cd STS/DockerizingSpringBoot
+
+2nd step:   build image command:
+            docker build -t spring-boot-docker.jar .
+
+3rd step:   docker image check command:
+            docker image ls
+
+4th step:   docker image delete command:
+            docker rmi -f 2427b0a8a407(image id)
+
+5th step:   build image to container and run command:
+            docker run -p 9090:8080 spring-boot-docker.jar
+
+6th step:   show running container command:
+            docker ps -all
+
+7th step:   stop run command:
+            docker stop b7b04b7df2c1(containerId)
+
+Docker - Pushing and Pulling Docker Image to Docker Hub 
+
+1st step:   docker login command:
+            docker login
+            username:(mirajulislam)
+            enter press:
+            password: miraj00178
+
+2nd step:   give tag name in command
+            docker tag spring-boot-docker.jar mirajulislam/spring-boot-docker.jar
+
+3rd step:   docker push command:
+            docker push mirajulislam/spring-boot-docker.jar
+
+4th step:   docker pull command:
+            docker pull mirajulislam/spring-boot-docker.jar
