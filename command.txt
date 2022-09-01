@@ -2,6 +2,16 @@ project build and docker image command
 
 ------> spring-boot:build-image -DskipTests
 
+
+docker run -p 9411:9411 openzipkin/zipkin:2.23
+docker push docker.io/mirajulislam/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+docker-compose --version
+docker-compose up
+docker push mirajulislam/mmv2-naming-server:0.0.1-SNAPSHOT
+docker push mirajulislam/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
+docker push mirajulislam/mmv2-api-gateway:0.0.1-SNAPSHOT
+watch -n 0.1 curl http://localhost:8000/sample-api
+
 docker command
 
 1st step:   go to project jar location in Docker Quickstart Terminal.
